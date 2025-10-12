@@ -1,7 +1,14 @@
+using BulkyWeb.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Add Dbcontect connection
+builder.Services.AddDbContext<ApplicationDbContext>(opt => 
+    opt.UseSqlite($"Data Source={AppDomain.CurrentDomain.BaseDirectory}{builder.Configuration.GetConnectionString("Sqlite")}"));
 
 var app = builder.Build();
 
