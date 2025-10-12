@@ -7,8 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // Add Dbcontect connection
-builder.Services.AddDbContext<ApplicationDbContext>(opt => 
-    opt.UseSqlite($"Data Source={AppDomain.CurrentDomain.BaseDirectory}{builder.Configuration.GetConnectionString("Sqlite")}"));
+builder.Services.AddDbContext<ApplicationDbContext>(opt =>
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
