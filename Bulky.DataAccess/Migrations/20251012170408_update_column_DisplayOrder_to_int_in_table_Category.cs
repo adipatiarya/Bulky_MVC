@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace BulkyWeb.Migrations
+namespace Bulky.DataAccess.Migrations
 {
     /// <inheritdoc />
     public partial class update_column_DisplayOrder_to_int_in_table_Category : Migration
