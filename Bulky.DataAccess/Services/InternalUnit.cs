@@ -15,12 +15,14 @@ namespace Bulky.DataAccess.Services
     {
         private ApplicationDbContext _context;
         public CategoryRepository CategoryRepository  { get; private set; }
+        public ProductRepository ProductRepository { get; private set; }
 
 
         public InternalUnit(ApplicationDbContext context)
         {
             _context = context;
             CategoryRepository = new CategoryRepository(_context);
+            ProductRepository = new ProductRepository(_context);
         }
         public void Save()
         {
