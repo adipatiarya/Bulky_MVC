@@ -2,6 +2,7 @@
 using Bulky.DataAccess.Repository.IRepository;
 using Bulky.DataAccess.Services.IServices;
 using Bulky.Models;
+using Bulky.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -22,27 +23,46 @@ namespace BulkyWeb.Areas.Admin.Controllers
         }
 
         public IActionResult Create() {
-            IEnumerable<SelectListItem> Categories = _internal.CategoryRepository.GetAll().Select((u) => new SelectListItem { 
+       
+            // ViewBag.Categories = Categories;
+           // ViewData["Categories"] = Categories;
+
+            ProductVM productVM = new ProductVM();
+
+            productVM.Product = new Product();
+            
+            productVM.CategoryList = _internal.CategoryRepository.GetAll().Select((u) => new SelectListItem
+            {
                 Text = u.Name,
                 Value = u.Id.ToString(),
             });
-            // ViewBag.Categories = Categories;
-            ViewData["Categories"] = Categories;
-            return View();
+
+            return View(productVM);
         }
 
         [HttpPost]
-        public IActionResult Create(Product obj)
+        public IActionResult Create(ProductVM productVM)
         {
 
             if (ModelState.IsValid) {
 
-                _internal.ProductRepository.Add(obj);
+                _internal.ProductRepository.Add(productVM.Product);
                 _internal.Save();
                 TempData["success"] = "Product created successfully";
                 return RedirectToAction("Index", "Product");
+            } else
+            {
+              
+
+                productVM.CategoryList = _internal.CategoryRepository.GetAll().Select((u) => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString(),
+                });
+                return View(productVM);
+
             }
-            return View();
+               
         }
 
         public IActionResult Edit(int? id)
@@ -70,7 +90,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
                 _internal.Save();
                 TempData["success"] = "Product updated successfully";
                 return RedirectToAction("Index", "Product");
-            }
+            } 
             return View();
         }
 
