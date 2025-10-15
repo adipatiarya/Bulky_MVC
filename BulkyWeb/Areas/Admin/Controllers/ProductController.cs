@@ -3,6 +3,7 @@ using Bulky.DataAccess.Repository.IRepository;
 using Bulky.DataAccess.Services.IServices;
 using Bulky.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BulkyWeb.Areas.Admin.Controllers
 {
@@ -20,7 +21,12 @@ namespace BulkyWeb.Areas.Admin.Controllers
             return View(ProductList);
         }
 
-        public IActionResult Create() { 
+        public IActionResult Create() {
+            IEnumerable<SelectListItem> Categories = _internal.CategoryRepository.GetAll().Select((u) => new SelectListItem { 
+                Text = u.Name,
+                Value = u.Id.ToString(),
+            });
+            ViewBag.Categories = Categories;
             return View();
         }
 
