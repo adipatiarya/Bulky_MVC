@@ -12,6 +12,8 @@ namespace Bulky.DataAccess.Services.IServices
     {
         CategoryRepository CategoryRepository { get; }
 
+        ProductRepository ProductRepository { get; }
+
         void Save();
     }
 }
