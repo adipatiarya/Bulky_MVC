@@ -3,6 +3,7 @@ using Bulky.DataAccess.Repository.IRepository;
 using Bulky.DataAccess.Services.IServices;
 using Bulky.Models;
 using Bulky.Models.ViewModels;
+using BulkyWeb.Collections;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -135,5 +136,17 @@ namespace BulkyWeb.Areas.Admin.Controllers
 
             return RedirectToAction("Index", "Product");
         }
+
+
+        #region
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            Collections<Product> Collections = new Collections<Product>();
+            Collections.Total = 1;
+            Collections.rows = _internal.ProductRepository.GetAll(includeProperties: "Category").ToList();
+            return Json(Collections);
+        }
+        #endregion
     }
 }
