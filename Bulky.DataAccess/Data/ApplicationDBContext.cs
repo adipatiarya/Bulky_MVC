@@ -15,6 +15,7 @@ namespace Bulky.DataAccess.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             //sedeer
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id=1, Name = "Action", DisplayOrder = 1 },
