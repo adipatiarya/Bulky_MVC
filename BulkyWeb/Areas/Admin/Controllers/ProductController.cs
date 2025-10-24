@@ -106,20 +106,6 @@ namespace BulkyWeb.Areas.Admin.Controllers
             }
                
         }
-        public IActionResult Delete(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            Product? ProductFromDb = _internal.ProductRepository.Get((u) => u.Id == id);
-            if (ProductFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(ProductFromDb);
-        }
-
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePOST(int? id)
         {
@@ -135,5 +121,32 @@ namespace BulkyWeb.Areas.Admin.Controllers
 
             return RedirectToAction("Index", "Product");
         }
+
+        #region API CALLS
+        [HttpGet]
+        public IActionResult GetAll() {
+            List<Product> ProductList = _internal.ProductRepository.GetAll(includeProperties: "Category").ToList();
+            return Json(new { data = ProductList });
+        }
+
+        public IActionResult Delete(int? id) {
+            var productToBeDeleted = _internal.ProductRepository.Get(u => u.Id == id);
+            if (productToBeDeleted == null) {
+                return Json(new { success = false, message = "Error while detele" });
+            }
+
+            var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, productToBeDeleted.ImageUrl.TrimStart('\\'));
+            if (System.IO.File.Exists(oldImagePath))
+            {
+                System.IO.File.Delete(oldImagePath);
+            }
+            _internal.ProductRepository.Remove(productToBeDeleted);
+            _internal.Save();
+
+            return Json(new { success = true, message = "Delete Success" });
+
+
+        }
+        #endregion
     }
 }
